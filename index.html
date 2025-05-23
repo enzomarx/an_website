@@ -17,8 +17,24 @@
       position: relative;
     }
 
+    #startButton {
+      font-size: 2rem;
+      padding: 1rem 2rem;
+      cursor: pointer;
+      border: none;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+
+    #startButton:hover {
+      transform: scale(1.1);
+    }
+
     #countdown {
       font-size: 10rem;
+      display: none;
     }
 
     #message {
@@ -59,6 +75,7 @@
 </head>
 <body>
 
+  <button id="startButton">Começar</button>
   <div id="countdown">10</div>
   <div id="message"></div>
   <img id="gorilla" src="gorila.png" alt="Gorila">
@@ -69,22 +86,31 @@
   </audio>
 
   <script>
+    const startButton = document.getElementById('startButton');
     const countdownEl = document.getElementById('countdown');
     const messageEl = document.getElementById('message');
     const gorillaEl = document.getElementById('gorilla');
     const reggaeAudio = document.getElementById('reggae');
 
-    let countdown = 10;
+    startButton.addEventListener('click', () => {
+      startButton.style.display = 'none';
+      countdownEl.style.display = 'block';
+      startCountdown();
+    });
 
-    let interval = setInterval(() => {
-      countdown = countdown - 1;
-      countdownEl.textContent = countdown;
+    function startCountdown() {
+      let countdown = 10;
 
-      if (countdown <= 0) {
-        clearInterval(interval);
-        startFinalSequence();
-      }
-    }, 1000);
+      let interval = setInterval(() => {
+        countdown = countdown - 1;
+        countdownEl.textContent = countdown;
+
+        if (countdown <= 0) {
+          clearInterval(interval);
+          startFinalSequence();
+        }
+      }, 1000);
+    }
 
     function startFinalSequence() {
       const finalSteps = ["0.5", "0.4", "0.3", "0.2", "0.1"];
