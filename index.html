@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Countdown Surprise</title>
+  <style>
+    body {
+      background-color: #90ee90; /* verde claro */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #countdown {
+      font-size: 10rem;
+    }
+
+    #message {
+      font-size: 2rem;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #gorilla {
+      display: none;
+      margin-top: 20px;
+      max-width: 60%;
+      height: auto;
+      animation: dance 0.5s infinite alternate;
+    }
+
+    @keyframes dance {
+      from { transform: rotate(-5deg); }
+      to { transform: rotate(5deg); }
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      opacity: 0.7;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="countdown">10</div>
+  <div id="message"></div>
+  <img id="gorilla" src="gorila.png" alt="Gorila">
+
+  <audio id="reggae">
+    <source src="reggae.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    const countdownEl = document.getElementById('countdown');
+    const messageEl = document.getElementById('message');
+    const gorillaEl = document.getElementById('gorilla');
+    const reggaeAudio = document.getElementById('reggae');
+
+    let countdown = 10;
+
+    let interval = setInterval(() => {
+      countdown = countdown - 1;
+      countdownEl.textContent = countdown;
+
+      if (countdown <= 0) {
+        clearInterval(interval);
+        startFinalSequence();
+      }
+    }, 1000);
+
+    function startFinalSequence() {
+      const finalSteps = ["0.5", "0.4", "0.3", "0.2", "0.1"];
+      let i = 0;
+      let finalInterval = setInterval(() => {
+        countdownEl.textContent = finalSteps[i];
+        i++;
+        if (i >= finalSteps.length) {
+          clearInterval(finalInterval);
+          showMessages();
+        }
+      }, 500);
+    }
+
+    function showMessages() {
+      countdownEl.style.display = 'none';
+      messageEl.innerHTML = "Você que pediu isso.<br>Ninguém obrigou você a abrir...";
+      setTimeout(showGorilla, 3000);
+    }
+
+    function showGorilla() {
+      messageEl.style.display = 'none';
+      gorillaEl.style.display = 'block';
+      reggaeAudio.volume = 1.0;
+      reggaeAudio.play();
+      createConfetti();
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.top = -10 + 'px';
+        confetti.style.backgroundColor = getRandomColor();
+        confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+        document.body.appendChild(confetti);
+      }
+    }
+
+    function getRandomColor() {
+      const colors = ['#FF5733', '#FFC300', '#DAF7A6', '#FF33F6', '#33FFF2', '#3375FF'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+  </script>
+
+</body>
+</html>
